@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.Identity;
@@ -85,6 +86,12 @@ namespace MvcApp
                     new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
             return manager;
+        }
+
+        public async Task<IdentityResult> AddLoginAsync(IPrincipal principal, ExternalLoginInfo loginInfo)
+        {
+            var result = await AddLoginAsync(principal.Identity.GetUserId(), loginInfo.Login);
+            return result;
         }
     }
 

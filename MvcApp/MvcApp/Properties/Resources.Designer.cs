@@ -77,5 +77,77 @@ namespace MvcApp.Properties {
                 return ResourceManager.GetString("Account_VerifyCode_InvalidCode", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   電話番号が追加されました。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Manage_Status_AddPhoneSuccess {
+            get {
+                return ResourceManager.GetString("Manage_Status_AddPhoneSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   パスワードが変更されました。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Manage_Status_ChangePasswordSuccess {
+            get {
+                return ResourceManager.GetString("Manage_Status_ChangePasswordSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   エラーが発生しました。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Manage_Status_Error {
+            get {
+                return ResourceManager.GetString("Manage_Status_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   ログインが削除されました に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Manage_Status_RemoveLoginSuccess {
+            get {
+                return ResourceManager.GetString("Manage_Status_RemoveLoginSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   電話番号が削除されました。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Manage_Status_RemovePhoneSuccess {
+            get {
+                return ResourceManager.GetString("Manage_Status_RemovePhoneSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   パスワードが設定されました。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Manage_Status_SetPasswordSuccess {
+            get {
+                return ResourceManager.GetString("Manage_Status_SetPasswordSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   2 要素認証プロバイダーが設定されました。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Manage_Status_SetTwoFactorSuccess {
+            get {
+                return ResourceManager.GetString("Manage_Status_SetTwoFactorSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   電話番号を確認できませんでした に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Manage_VerifyPhoneNumber_Failed {
+            get {
+                return ResourceManager.GetString("Manage_VerifyPhoneNumber_Failed", resourceCulture);
+            }
+        }
     }
 }

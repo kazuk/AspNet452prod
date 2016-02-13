@@ -125,4 +125,28 @@
     <value>無効なコード。</value>
     <comment>AccountController.VerifyCode error message</comment>
   </data>
+  <data name="Manage_Status_AddPhoneSuccess" xml:space="preserve">
+    <value>電話番号が追加されました。</value>
+  </data>
+  <data name="Manage_Status_ChangePasswordSuccess" xml:space="preserve">
+    <value>パスワードが変更されました。</value>
+  </data>
+  <data name="Manage_Status_Error" xml:space="preserve">
+    <value>エラーが発生しました。</value>
+  </data>
+  <data name="Manage_Status_RemoveLoginSuccess" xml:space="preserve">
+    <value>ログインが削除されました</value>
+  </data>
+  <data name="Manage_Status_RemovePhoneSuccess" xml:space="preserve">
+    <value>電話番号が削除されました。</value>
+  </data>
+  <data name="Manage_Status_SetPasswordSuccess" xml:space="preserve">
+    <value>パスワードが設定されました。</value>
+  </data>
+  <data name="Manage_Status_SetTwoFactorSuccess" xml:space="preserve">
+    <value>2 要素認証プロバイダーが設定されました。</value>
+  </data>
+  <data name="Manage_VerifyPhoneNumber_Failed" xml:space="preserve">
+    <value>電話番号を確認できませんでした</value>
+  </data>
 </root>
