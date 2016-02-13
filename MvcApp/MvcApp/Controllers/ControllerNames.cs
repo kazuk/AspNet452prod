@@ -1,6 +1,6 @@
 namespace MvcApp.Controllers
 {
-    static class ControllerNames
+    public static class ControllerNames
     {
         public const string Account = "Account";
         public const string Manage = "Manage";

@@ -26,11 +26,16 @@ namespace MvcApp.Controllers
 
         public static class ActionNames
         {
+            public const string ResetPassword = "ResetPassword";
+            public const string ForgotPassword = "ForgotPassword";
+            public const string ExternalLoginConfirmation = "ExternalLoginConfirmation";
+            public const string ExternalLogin = "ExternalLogin";
             public const string Login = "Login";
             public const string SendCode = "SendCode";
             public const string VerifyCode = "VerifyCode";
             public const string ExternalLoginCallback = "ExternalLoginCallback";
             public const string ResetPasswordConfirmation = "ResetPasswordConfirmation";
+            public const string Register = "Register";
         }
 
         public static class ViewNames
