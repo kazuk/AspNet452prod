@@ -1,9 +1,5 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -28,11 +24,37 @@ namespace MvcApp.Controllers
             SignInManager = signInManager;
         }
 
+        public static class ActionNames
+        {
+            public const string Login = "Login";
+            public const string SendCode = "SendCode";
+            public const string VerifyCode = "VerifyCode";
+            public const string ExternalLoginCallback = "ExternalLoginCallback";
+            public const string ResetPasswordConfirmation = "ResetPasswordConfirmation";
+        }
+
+        public static class ViewNames
+        {
+            public const string ExternalLoginFailure = "ExternalLoginFailure";
+            public const string ExternalLoginConfirmation = "ExternalLoginConfirmation";
+            public const string SendCode = "SendCode";
+            public const string ResetPasswordConfirmation = "ResetPasswordConfirmation";
+            public const string ResetPassword = "ResetPassword";
+            public const string ForgotPasswordConfirmation = "ForgotPasswordConfirmation";
+            public const string ForgotPassword = "ForgotPassword";
+            public const string ConfirmEmail = "ConfirmEmail";
+            public const string Register = "Register";
+            public const string Error = "Error";
+            public const string VerifyCode = "VerifyCode";
+            public const string Lockout = "Lockout";
+            public const string Login = "Login";
+        }
+
         public ApplicationSignInManager SignInManager
         {
             get
             {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+                return _signInManager ?? ControllerContext.GetApplicationSignInManager();
             }
             private set 
             { 
@@ -40,11 +62,12 @@ namespace MvcApp.Controllers
             }
         }
 
+
         public ApplicationUserManager UserManager
         {
             get
             {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                return _userManager ?? ControllerContext.GetUserManager();
             }
             private set
             {
@@ -52,17 +75,149 @@ namespace MvcApp.Controllers
             }
         }
 
-        //
-        // GET: /Account/Login
+        // View Results
+        private ActionResult LoginView()
+        {
+            return View(ViewNames.Login);
+        }
+
+        private ActionResult LoginView(LoginViewModel model)
+        {
+            return View(ViewNames.Login, model);
+        }
+
+        private ActionResult LockoutView()
+        {
+            return View(ViewNames.Lockout);
+        }
+
+        private ActionResult VerifyCodeView(VerifyCodeViewModel model)
+        {
+            return View(ViewNames.VerifyCode, model);
+        }
+
+        private ActionResult ErrorView()
+        {
+            return View(ViewNames.Error);
+        }
+
+        private ActionResult RegisterView()
+        {
+            return View(ViewNames.Register);
+        }
+
+        private ActionResult RegisterView(RegisterViewModel model)
+        {
+            return View(ViewNames.Register, model);
+        }
+
+        private ActionResult ConfirmEmailView()
+        {
+            return View(ViewNames.ConfirmEmail);
+        }
+
+        private ActionResult ForgotPasswordView()
+        {
+            return View(ViewNames.ForgotPassword);
+        }
+
+        private ActionResult ForgotPasswordView(ForgotPasswordViewModel model)
+        {
+            return View(ViewNames.ForgotPassword, model);
+        }
+
+        private ActionResult ForgotPasswordConfirmationView()
+        {
+            return View(ViewNames.ForgotPasswordConfirmation);
+        }
+
+        private ViewResult ResetPasswordView()
+        {
+            return View(ViewNames.ResetPassword);
+        }
+
+        private ActionResult ResetPasswordView(ResetPasswordViewModel model)
+        {
+            return View(ViewNames.ResetPassword, model);
+        }
+
+        private ActionResult ResetPasswordConfirmationView()
+        {
+            return View(ViewNames.ResetPasswordConfirmation);
+        }
+
+        private string ExternalLoginCallbackActionUrl(string returnUrl)
+        {
+            return Url.Action(ActionNames.ExternalLoginCallback, ControllerNames.Account, new { ReturnUrl = returnUrl });
+        }
+
+        private ActionResult SendCodeView()
+        {
+            return View(ViewNames.SendCode);
+        }
+
+        private ActionResult SendCodeView(SendCodeViewModel model)
+        {
+            return View(ViewNames.SendCode, model);
+        }
+
+        private ActionResult RedirectToVerifyCode(SendCodeViewModel model)
+        {
+            return RedirectToAction(ActionNames.VerifyCode,
+                new { Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe });
+        }
+
+        private ActionResult ExternalLoginConfirmationView(ExternalLoginConfirmationViewModel model)
+        {
+            return View(ViewNames.ExternalLoginConfirmation, model);
+        }
+
+        private ActionResult ExternalLoginFailureView()
+        {
+            return View(ViewNames.ExternalLoginFailure);
+        }
+
+        // redirection results
+
+        private RedirectToRouteResult RedirectToResetPasswordConfirmaion()
+        {
+            return RedirectToAction(ActionNames.ResetPasswordConfirmation, ControllerNames.Account);
+        }
+
+        private ActionResult RedirectToSendCode(string returnUrl)
+        {
+            return RedirectToAction(ActionNames.SendCode, new { ReturnUrl = returnUrl, RememberMe = false });
+        }
+
+        private ActionResult RedirectToSendCode(LoginViewModel model, string returnUrl)
+        {
+            return RedirectToAction(ActionNames.SendCode, new { ReturnUrl = returnUrl, model.RememberMe });
+        }
+
+        private ActionResult RedirectoToLogin()
+        {
+            return RedirectToAction(ActionNames.Login);
+        }
+
+        private ActionResult RedirectToManageIndex()
+        {
+            return RedirectToAction("Index", ControllerNames.Manage);
+        }
+
+        private ActionResult RedirectToHomeIndex()
+        {
+            return RedirectToAction("Index", ControllerNames.Home);
+        }
+
+        // actions
+
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View();
+            return LoginView();
         }
 
-        //
-        // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -70,7 +225,7 @@ namespace MvcApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return LoginView(model);
             }
 
             // これは、アカウント ロックアウトの基準となるログイン失敗回数を数えません。
@@ -81,31 +236,29 @@ namespace MvcApp.Controllers
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
-                    return View("Lockout");
+                    return LockoutView();
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return RedirectToSendCode(model, returnUrl);
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "無効なログイン試行です。");
-                    return View(model);
+                    ModelState.AddModelError("", Properties.Resources.Account_Login_InvalidLoginAttempt); //  "無効なログイン試行です。"
+                    return LoginView(model);
             }
         }
 
-        //
-        // GET: /Account/VerifyCode
+
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
         {
             // ユーザーがユーザー名/パスワードまたは外部ログイン経由でログイン済みであることが必要です。
             if (!await SignInManager.HasBeenVerifiedAsync())
             {
-                return View("Error");
+                return ErrorView();
             }
-            return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
+            var model = new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe };
+            return VerifyCodeView(model);
         }
 
-        //
-        // POST: /Account/VerifyCode
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -113,7 +266,7 @@ namespace MvcApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return VerifyCodeView(model);
             }
 
             // 次のコードは、2 要素コードに対するブルート フォース攻撃を防ぎます。
@@ -126,119 +279,102 @@ namespace MvcApp.Controllers
                 case SignInStatus.Success:
                     return RedirectToLocal(model.ReturnUrl);
                 case SignInStatus.LockedOut:
-                    return View("Lockout");
+                    return LockoutView();
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "無効なコード。");
-                    return View(model);
+                    ModelState.AddModelError("", Properties.Resources.Account_VerifyCode_InvalidCode );
+                    return VerifyCodeView( model);
             }
         }
 
-        //
-        // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            return RegisterView();
         }
 
-        //
-        // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return RegisterView(model);
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+            var result = await UserManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
-                    // アカウント確認とパスワード リセットを有効にする方法の詳細については、http://go.microsoft.com/fwlink/?LinkID=320771 を参照してください
-                    // このリンクを含む電子メールを送信します
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "アカウントの確認", "このリンクをクリックすることによってアカウントを確認してください <a href=\"" + callbackUrl + "\">こちら</a>");
+                // アカウント確認とパスワード リセットを有効にする方法の詳細については、http://go.microsoft.com/fwlink/?LinkID=320771 を参照してください
+                // このリンクを含む電子メールを送信します
+                // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                // await UserManager.SendEmailAsync(user.Id, "アカウントの確認", "このリンクをクリックすることによってアカウントを確認してください <a href=\"" + callbackUrl + "\">こちら</a>");
 
-                    return RedirectToAction("Index", "Home");
-                }
-                AddErrors(result);
+                return RedirectToHomeIndex();
             }
+            AddErrors(result);
 
             // ここで問題が発生した場合はフォームを再表示します
-            return View(model);
+            return RegisterView(model);
         }
 
-        //
-        // GET: /Account/ConfirmEmail
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)
             {
-                return View("Error");
+                return  ErrorView();
             }
             var result = await UserManager.ConfirmEmailAsync(userId, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+            return result.Succeeded 
+                ? ConfirmEmailView() 
+                : ErrorView();
         }
 
-        //
-        // GET: /Account/ForgotPassword
         [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
-            return View();
+            return ForgotPasswordView();
         }
 
-        //
-        // POST: /Account/ForgotPassword
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return ForgotPasswordView(model);
+            var user = await UserManager.FindByNameAsync(model.Email);
+            if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
-                {
-                    // ユーザーが存在しないことや未確認であることを公開しません。
-                    return View("ForgotPasswordConfirmation");
-                }
-
-                // アカウント確認とパスワード リセットを有効にする方法の詳細については、http://go.microsoft.com/fwlink/?LinkID=320771 を参照してください
-                // このリンクを含む電子メールを送信します
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "パスワード", "のリセット <a href=\"" + callbackUrl + "\">こちら</a> をクリックして、パスワードをリセットしてください");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                // ユーザーが存在しないことや未確認であることを公開しません。
+                return ForgotPasswordConfirmationView();
             }
 
+            // アカウント確認とパスワード リセットを有効にする方法の詳細については、http://go.microsoft.com/fwlink/?LinkID=320771 を参照してください
+            // このリンクを含む電子メールを送信します
+            // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
+            // await UserManager.SendEmailAsync(user.Id, "パスワード", "のリセット <a href=\"" + callbackUrl + "\">こちら</a> をクリックして、パスワードをリセットしてください");
+            // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+
             // ここで問題が発生した場合はフォームを再表示します
-            return View(model);
+            return ForgotPasswordView(model);
         }
 
-        //
-        // GET: /Account/ForgotPasswordConfirmation
         [AllowAnonymous]
         public ActionResult ForgotPasswordConfirmation()
         {
-            return View();
+            return ForgotPasswordConfirmationView();
         }
 
-        //
-        // GET: /Account/ResetPassword
         [AllowAnonymous]
         public ActionResult ResetPassword(string code)
         {
-            return code == null ? View("Error") : View();
+            return code == null ? ErrorView() : 
+                ResetPasswordView();
         }
 
-        //
-        // POST: /Account/ResetPassword
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -246,29 +382,27 @@ namespace MvcApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return ResetPasswordView(model);
             }
             var user = await UserManager.FindByNameAsync(model.Email);
             if (user == null)
             {
                 // ユーザーが存在しないことを公開しません。
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
+                return RedirectToResetPasswordConfirmaion();
             }
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
+                return RedirectToResetPasswordConfirmaion();
             }
             AddErrors(result);
-            return View();
+            return ResetPasswordView();
         }
 
-        //
-        // GET: /Account/ResetPasswordConfirmation
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
         {
-            return View();
+            return ResetPasswordConfirmationView();
         }
 
         //
@@ -279,8 +413,9 @@ namespace MvcApp.Controllers
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
             // 外部ログイン プロバイダーへのリダイレクトを要求します
-            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
+            return new ChallengeResult(provider, ExternalLoginCallbackActionUrl(returnUrl));
         }
+
 
         //
         // GET: /Account/SendCode
@@ -290,12 +425,13 @@ namespace MvcApp.Controllers
             var userId = await SignInManager.GetVerifiedUserIdAsync();
             if (userId == null)
             {
-                return View("Error");
+                return ErrorView();
             }
             var userFactors = await UserManager.GetValidTwoFactorProvidersAsync(userId);
             var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
-            return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
+            return SendCodeView(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
+
 
         //
         // POST: /Account/SendCode
@@ -306,26 +442,27 @@ namespace MvcApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return SendCodeView();
             }
 
             // トークンを生成して送信します。
             if (!await SignInManager.SendTwoFactorCodeAsync(model.SelectedProvider))
             {
-                return View("Error");
+                return ErrorView();
             }
-            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
+            return RedirectToVerifyCode(model);
         }
+
 
         //
         // GET: /Account/ExternalLoginCallback
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
-            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+            var loginInfo = await ControllerContext.Authentication().GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
-                return RedirectToAction("Login");
+                return RedirectoToLogin();
             }
 
             // ユーザーが既にログインを持っている場合、この外部ログイン プロバイダーを使用してユーザーをサインインします
@@ -335,17 +472,19 @@ namespace MvcApp.Controllers
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
-                    return View("Lockout");
+                    return LockoutView();
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
+                    return RedirectToSendCode(returnUrl);
                 case SignInStatus.Failure:
                 default:
                     // ユーザーがアカウントを持っていない場合、ユーザーにアカウントを作成するよう求めます
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                    var model = new ExternalLoginConfirmationViewModel { Email = loginInfo.Email };
+                    return ExternalLoginConfirmationView(model);
             }
         }
+
 
         //
         // POST: /Account/ExternalLoginConfirmation
@@ -356,34 +495,37 @@ namespace MvcApp.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Manage");
+                return RedirectToManageIndex();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                // 外部ログイン プロバイダーからユーザーに関する情報を取得します
-                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
-                if (info == null)
-                {
-                    return View("ExternalLoginFailure");
-                }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user);
+                ViewBag.ReturnUrl = returnUrl;
+                return ExternalLoginConfirmationView(model);
+            }
+
+            // 外部ログイン プロバイダーからユーザーに関する情報を取得します
+            var info = await ControllerContext.Authentication().GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                return ExternalLoginFailureView();
+            }
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+            var result = await UserManager.CreateAsync(user);
+            if (result.Succeeded)
+            {
+                result = await UserManager.AddLoginAsync(user.Id, info.Login);
                 if (result.Succeeded)
                 {
-                    result = await UserManager.AddLoginAsync(user.Id, info.Login);
-                    if (result.Succeeded)
-                    {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
-                    }
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    return RedirectToLocal(returnUrl);
                 }
-                AddErrors(result);
             }
-
+            AddErrors(result);
             ViewBag.ReturnUrl = returnUrl;
-            return View(model);
+            return ExternalLoginConfirmationView(model);
         }
+
 
         //
         // POST: /Account/LogOff
@@ -391,8 +533,8 @@ namespace MvcApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            ControllerContext.Authentication().SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            return RedirectToHomeIndex();
         }
 
         //
@@ -400,8 +542,9 @@ namespace MvcApp.Controllers
         [AllowAnonymous]
         public ActionResult ExternalLoginFailure()
         {
-            return View();
+            return ExternalLoginFailureView();
         }
+
 
         protected override void Dispose(bool disposing)
         {
@@ -423,17 +566,6 @@ namespace MvcApp.Controllers
             base.Dispose(disposing);
         }
 
-        #region ヘルパー
-        // 外部ログインの追加時に XSRF の防止に使用します
-        private const string XsrfKey = "XsrfId";
-
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
 
         private void AddErrors(IdentityResult result)
         {
@@ -445,15 +577,16 @@ namespace MvcApp.Controllers
 
         private ActionResult RedirectToLocal(string returnUrl)
         {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            return RedirectToAction("Index", "Home");
+            return Url.IsLocalUrl(returnUrl) 
+                ? Redirect(returnUrl) 
+                : RedirectToHomeIndex();
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult
         {
+            // 外部ログインの追加時に XSRF の防止に使用します
+            private const string XsrfKey = "XsrfId";
+
             public ChallengeResult(string provider, string redirectUri)
                 : this(provider, redirectUri, null)
             {
@@ -477,9 +610,8 @@ namespace MvcApp.Controllers
                 {
                     properties.Dictionary[XsrfKey] = UserId;
                 }
-                context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
+                context.Authentication().Challenge(properties, LoginProvider);
             }
         }
-        #endregion
     }
 }
