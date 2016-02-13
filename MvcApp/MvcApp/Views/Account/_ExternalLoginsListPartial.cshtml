@@ -4,8 +4,8 @@
 <h4>別のサービスを使用してログインしてください。</h4>
 <hr />
 @{
-    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
-    if (loginProviders.Count() == 0) {
+    var loginProviders = (List<AuthenticationDescription>) ViewData["LoginProviders"];
+    if (!loginProviders.Any()) {
         <div>
             <p>
                 構成済みの外部認証サービスはありません。外部サービス経由のログインをサポートするようにこの ASP.NET アプリケーションを設定する方法の

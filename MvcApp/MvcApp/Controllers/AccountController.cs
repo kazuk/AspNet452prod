@@ -78,11 +78,13 @@ namespace MvcApp.Controllers
         // View Results
         private ActionResult LoginView()
         {
+            ViewData["LoginProviders"] = ControllerContext.Authentication().GetExternalAuthenticationTypes();
             return View(ViewNames.Login);
         }
 
         private ActionResult LoginView(LoginViewModel model)
         {
+            ViewData["LoginProviders"] = ControllerContext.Authentication().GetExternalAuthenticationTypes();
             return View(ViewNames.Login, model);
         }
 
