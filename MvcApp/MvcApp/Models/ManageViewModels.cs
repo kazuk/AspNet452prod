@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using MvcApp.Properties;
 
 namespace MvcApp.Models
 {
@@ -28,14 +29,14 @@ namespace MvcApp.Models
     public class SetPasswordViewModel
     {
         [Required]
-        [StringLength(100, ErrorMessage = "{0} の長さは {2} 文字以上である必要があります。", MinimumLength = 6)]
+        [StringLength(100, ErrorMessageResourceType = typeof (Resources), ErrorMessageResourceName = "ErrorMessage_Password_LengthError", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "新しいパスワード")]
+        [Display(ResourceType = typeof (Resources), Name = "Property_NewPassword")]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "新しいパスワードの確認入力")]
-        [Compare("NewPassword", ErrorMessage = "新しいパスワードと確認のパスワードが一致しません。")]
+        [Display(ResourceType = typeof (Resources), Name = "Property_NewPasswordConfirm")]
+        [Compare("NewPassword", ErrorMessageResourceType = typeof (Resources), ErrorMessageResourceName = "ErrorMessage_PasswordMissmatch_New")]
         public string ConfirmPassword { get; set; }
     }
 
@@ -43,18 +44,18 @@ namespace MvcApp.Models
     {
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "現在のパスワード")]
+        [Display(ResourceType = typeof (Resources), Name = "Property_CurrentPassword")]
         public string OldPassword { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "{0} の長さは {2} 文字以上である必要があります。", MinimumLength = 6)]
+        [StringLength(100, ErrorMessageResourceType = typeof (Resources), ErrorMessageResourceName = "ErrorMessage_Password_LengthError", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "新しいパスワード")]
+        [Display(ResourceType = typeof (Resources), Name = "Property_NewPassword")]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "新しいパスワードの確認入力")]
-        [Compare("NewPassword", ErrorMessage = "新しいパスワードと確認のパスワードが一致しません。")]
+        [Display(ResourceType = typeof (Resources), Name = "Property_NewPasswordConfirm")]
+        [Compare("NewPassword", ErrorMessageResourceType = typeof (Resources), ErrorMessageResourceName = "ErrorMessage_PasswordMissmatch_New")]
         public string ConfirmPassword { get; set; }
     }
 
@@ -62,19 +63,19 @@ namespace MvcApp.Models
     {
         [Required]
         [Phone]
-        [Display(Name = "電話番号")]
+        [Display(ResourceType = typeof (Resources), Name = "Property_PhoneNumber")]
         public string Number { get; set; }
     }
 
     public class VerifyPhoneNumberViewModel
     {
         [Required]
-        [Display(Name = "コード")]
+        [Display(ResourceType = typeof (Resources), Name = "Property_Code")]
         public string Code { get; set; }
 
         [Required]
         [Phone]
-        [Display(Name = "電話番号")]
+        [Display(ResourceType = typeof (Resources), Name = "Property_PhoneNumber")]
         public string PhoneNumber { get; set; }
     }
 

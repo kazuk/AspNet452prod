@@ -79,6 +79,33 @@ namespace MvcApp.Properties {
         }
         
         /// <summary>
+        ///   {0} の長さは {2} 文字以上である必要があります。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string ErrorMessage_Password_LengthError {
+            get {
+                return ResourceManager.GetString("ErrorMessage_Password_LengthError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   パスワードと確認のパスワードが一致しません。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string ErrorMessage_PasswordMissmatch {
+            get {
+                return ResourceManager.GetString("ErrorMessage_PasswordMissmatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   新しいパスワードと確認のパスワードが一致しません。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string ErrorMessage_PasswordMissmatch_New {
+            get {
+                return ResourceManager.GetString("ErrorMessage_PasswordMissmatch_New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   電話番号が追加されました。 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string Manage_Status_AddPhoneSuccess {
@@ -147,6 +174,96 @@ namespace MvcApp.Properties {
         public static string Manage_VerifyPhoneNumber_Failed {
             get {
                 return ResourceManager.GetString("Manage_VerifyPhoneNumber_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   コード に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Property_Code {
+            get {
+                return ResourceManager.GetString("Property_Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   現在のパスワード に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Property_CurrentPassword {
+            get {
+                return ResourceManager.GetString("Property_CurrentPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   電子メール に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Property_EMail {
+            get {
+                return ResourceManager.GetString("Property_EMail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   新しいパスワード に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Property_NewPassword {
+            get {
+                return ResourceManager.GetString("Property_NewPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   新しいパスワードの確認入力 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Property_NewPasswordConfirm {
+            get {
+                return ResourceManager.GetString("Property_NewPasswordConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   パスワード に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Property_Password {
+            get {
+                return ResourceManager.GetString("Property_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   パスワードの確認入力 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Property_PasswordConfirm {
+            get {
+                return ResourceManager.GetString("Property_PasswordConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   電話番号 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Property_PhoneNumber {
+            get {
+                return ResourceManager.GetString("Property_PhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   認証情報をこのブラウザーに保存しますか? に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Property_RememberBrowser {
+            get {
+                return ResourceManager.GetString("Property_RememberBrowser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   このアカウントを記憶する に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string Property_RememberMe {
+            get {
+                return ResourceManager.GetString("Property_RememberMe", resourceCulture);
             }
         }
     }

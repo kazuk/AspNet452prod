@@ -149,4 +149,44 @@
   <data name="Manage_VerifyPhoneNumber_Failed" xml:space="preserve">
     <value>電話番号を確認できませんでした</value>
   </data>
+  <data name="Property_Code" xml:space="preserve">
+    <value>コード</value>
+  </data>
+  <data name="Property_EMail" xml:space="preserve">
+    <value>電子メール</value>
+  </data>
+  <data name="Property_Password" xml:space="preserve">
+    <value>パスワード</value>
+  </data>
+  <data name="Property_PasswordConfirm" xml:space="preserve">
+    <value>パスワードの確認入力</value>
+  </data>
+  <data name="Property_RememberBrowser" xml:space="preserve">
+    <value>認証情報をこのブラウザーに保存しますか?</value>
+  </data>
+  <data name="Property_RememberMe" xml:space="preserve">
+    <value>このアカウントを記憶する</value>
+    <comment>言い回しおかしくない？</comment>
+  </data>
+  <data name="ErrorMessage_Password_LengthError" xml:space="preserve">
+    <value>{0} の長さは {2} 文字以上である必要があります。</value>
+  </data>
+  <data name="ErrorMessage_PasswordMissmatch" xml:space="preserve">
+    <value>パスワードと確認のパスワードが一致しません。</value>
+  </data>
+  <data name="Property_PhoneNumber" xml:space="preserve">
+    <value>電話番号</value>
+  </data>
+  <data name="ErrorMessage_PasswordMissmatch_New" xml:space="preserve">
+    <value>新しいパスワードと確認のパスワードが一致しません。</value>
+  </data>
+  <data name="Property_NewPassword" xml:space="preserve">
+    <value>新しいパスワード</value>
+  </data>
+  <data name="Property_NewPasswordConfirm" xml:space="preserve">
+    <value>新しいパスワードの確認入力</value>
+  </data>
+  <data name="Property_CurrentPassword" xml:space="preserve">
+    <value>現在のパスワード</value>
+  </data>
 </root>

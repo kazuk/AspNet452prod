@@ -1,11 +1,11 @@
-using System.Web.Mvc;
+ï»¿using System.Web.Mvc;
 using Microsoft.Owin.Security;
 
 namespace MvcApp.Controllers
 {
     internal class ChallengeResult : HttpUnauthorizedResult
     {
-        // ŠO•”ƒƒOƒCƒ“‚Ì’Ç‰Á‚É XSRF ‚Ì–h~‚Ég—p‚µ‚Ü‚·
+        // å¤–éƒ¨ãƒ­ã‚°ã‚¤ãƒ³ã®è¿½åŠ æ™‚ã« XSRF ã®é˜²æ­¢ã«ä½¿ç”¨ã—ã¾ã™
         private const string XsrfKey = "XsrfId";
 
         public ChallengeResult(string provider, string redirectUri)
