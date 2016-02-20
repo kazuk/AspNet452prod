@@ -8,6 +8,13 @@ namespace MvcApp.Controllers
 {
     public class HomeController : Controller
     {
+        public static class ActionNames
+        {
+            public const string Index = "Index";
+            public const string About = "About";
+            public const string Contact = "Contact";
+        }
+
         public ActionResult Index()
         {
             return View();

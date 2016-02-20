@@ -26,10 +26,15 @@ namespace MvcApp.Controllers
 
         public static class ActionNames
         {
+            public const string LinkLogin = "LinkLogin";
+            public const string RemoveLogin = "RemoveLogin";
+            public const string ChangePassword= "ChangePassword";
+            public const string AddPhoneNumber = "AddPhoneNumber";
             public const string Index = "Index";
             public const string ManageLogins = "ManageLogins";
             public const string VerifyPhoneNumber = "VerifyPhoneNumber";
             public const string LinkLoginCallback = "LinkLoginCallback";
+            public const string SetPassword = "SetPassword";
         }
 
         public ManageController()
@@ -425,7 +430,8 @@ namespace MvcApp.Controllers
             var model = new ManageLoginsViewModel
             {
                 CurrentLogins = userLogins,
-                OtherLogins = otherLogins
+                OtherLogins = otherLogins,
+                ExternalAuthenticationTypes = AuthenticationManager.GetAuthenticationTypes()
             };
             return ManageLoginsView(model);
         }

@@ -1,12 +1,13 @@
-﻿@using MvcApp.Controllers
+﻿@using MvcApp.Views.Account
 @model MvcApp.Models.SendCodeViewModel
+
 @{
     ViewBag.Title = "送信";
 }
 
 <h2>@ViewBag.Title.</h2>
 
-@using (Html.BeginForm(AccountController.ActionNames.SendCode, ControllerNames.Account, new { ReturnUrl = Model.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
+@using ( Html.AccountSendCodeForm(Model.ReturnUrl, new { @class = "form-horizontal", role = "form" })) {
     @Html.AntiForgeryToken()
     @Html.Hidden("rememberMe", @Model.RememberMe)
     <h4>確認コードを送信する</h4>

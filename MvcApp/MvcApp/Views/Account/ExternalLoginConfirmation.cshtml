@@ -1,4 +1,4 @@
-﻿@using MvcApp.Controllers
+﻿@using MvcApp.Views.Account
 @model MvcApp.Models.ExternalLoginConfirmationViewModel
 @{
     ViewBag.Title = "登録";
@@ -6,7 +6,7 @@
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.LoginProvider アカウントを関連付けます。</h3>
 
-@using (Html.BeginForm(AccountController.ActionNames.ExternalLoginConfirmation, ControllerNames.Account, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.AccountExternalLoginConfirmationForm( (string)ViewBag.ReturnUrl, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
 

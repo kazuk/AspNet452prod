@@ -11,6 +11,7 @@ namespace MvcApp.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        private readonly IAuthenticationManager _authenticationManager;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -18,14 +19,16 @@ namespace MvcApp.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IAuthenticationManager authenticationManager )
         {
-            UserManager = userManager;
-            SignInManager = signInManager;
+            _authenticationManager = authenticationManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public static class ActionNames
         {
+            public const string LogOff = "LogOff";
             public const string ResetPassword = "ResetPassword";
             public const string ForgotPassword = "ForgotPassword";
             public const string ExternalLoginConfirmation = "ExternalLoginConfirmation";
@@ -55,41 +58,21 @@ namespace MvcApp.Controllers
             public const string Login = "Login";
         }
 
-        public ApplicationSignInManager SignInManager
-        {
-            get
-            {
-                return _signInManager ?? ControllerContext.GetApplicationSignInManager();
-            }
-            private set 
-            { 
-                _signInManager = value; 
-            }
-        }
-
-
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? ControllerContext.GetUserManager();
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
+        public ApplicationSignInManager SignInManager => _signInManager ?? ControllerContext.GetApplicationSignInManager();
+        public ApplicationUserManager UserManager => _userManager ?? ControllerContext.GetUserManager();
+        private IAuthenticationManager AuthenticationManager => _authenticationManager ?? ControllerContext.Authentication();
 
         // View Results
         private ActionResult LoginView()
         {
-            ViewData["LoginProviders"] = ControllerContext.Authentication().GetExternalAuthenticationTypes();
+            ViewData["LoginProviders"] = AuthenticationManager.GetExternalAuthenticationTypes();
             return View(ViewNames.Login);
         }
 
+
         private ActionResult LoginView(LoginViewModel model)
         {
-            ViewData["LoginProviders"] = ControllerContext.Authentication().GetExternalAuthenticationTypes();
+            ViewData["LoginProviders"] = AuthenticationManager.GetExternalAuthenticationTypes();
             return View(ViewNames.Login, model);
         }
 
@@ -466,7 +449,7 @@ namespace MvcApp.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
-            var loginInfo = await ControllerContext.Authentication().GetExternalLoginInfoAsync();
+            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
                 return RedirectoToLogin();
@@ -512,7 +495,7 @@ namespace MvcApp.Controllers
             }
 
             // 外部ログイン プロバイダーからユーザーに関する情報を取得します
-            var info = await ControllerContext.Authentication().GetExternalLoginInfoAsync();
+            var info = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
                 return ExternalLoginFailureView();
@@ -540,7 +523,7 @@ namespace MvcApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            ControllerContext.Authentication().SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToHomeIndex();
         }
 

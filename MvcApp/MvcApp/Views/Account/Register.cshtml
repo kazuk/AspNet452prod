@@ -1,12 +1,12 @@
-﻿@using MvcApp.Controllers
+﻿@using MvcApp.Views.Account
 @model MvcApp.Models.RegisterViewModel
+
 @{
     ViewBag.Title = "登録";
 }
 
 <h2>@ViewBag.Title.</h2>
-
-@using (Html.BeginForm( AccountController.ActionNames.Register, ControllerNames.Account, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.AccountRegisterForm(new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <h4>新しいアカウントを作成します。</h4>

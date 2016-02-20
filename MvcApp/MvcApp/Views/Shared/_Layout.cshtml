@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using MvcApp.Views.Shared
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -18,13 +19,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("アプリケーション名", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ApplicationRootLink(new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("ホーム", "Index", "Home")</li>
-                    <li>@Html.ActionLink("詳細", "About", "Home")</li>
-                    <li>@Html.ActionLink("連絡先", "Contact", "Home")</li>
+                    <li>@Html.LinkHomeIndex()</li>
+                    <li>@Html.LinkHomeAbout()</li>
+                    <li>@Html.LinkHomeContact()</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

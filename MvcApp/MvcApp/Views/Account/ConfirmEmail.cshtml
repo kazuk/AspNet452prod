@@ -1,5 +1,7 @@
 ﻿@using MvcApp.Controllers
 @using MvcApp.Properties
+@using MvcApp.Views.Account
+
 @helper StringEmail()
 {
     @Resources.Property_EMail
@@ -11,6 +13,7 @@
 <h2>@ViewBag.Title</h2>
 <div>
     <p>
-        @(StringEmail())をご確認いただき、ありがとうございます。@Html.ActionLink("ログインするにはここをクリック", AccountController.ActionNames.Login,  ControllerNames.Account, routeValues: null, htmlAttributes: new { id = "loginLink" })してください。
+        @(StringEmail())をご確認いただき、ありがとうございます。
+        @Html.AccountLoginLink(new { id = "loginLink" })してください。
     </p>
 </div>

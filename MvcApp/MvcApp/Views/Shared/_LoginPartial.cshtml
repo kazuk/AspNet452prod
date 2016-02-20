@@ -1,13 +1,14 @@
 ﻿@using Microsoft.AspNet.Identity
+@using MvcApp.Views.Shared
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    using (Html.AccountLogOffForm(new { id = "logoutForm", @class = "navbar-right" }))
     {
-    @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
 
-    <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("こんにちは、" + User.Identity.GetUserName() + "さん", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            @Html.LinkManageIndex(User.Identity.GetUserName(), new { title = "Manage" })
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">ログオフ</a></li>
     </ul>
@@ -16,7 +17,7 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("登録", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("ログイン", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        <li>@Html.LinkAccountRegister(new { id = "registerLink" })</li>
+        <li>@Html.LinkAccountLogin(new { id = "loginLink" })</li>
     </ul>
 }

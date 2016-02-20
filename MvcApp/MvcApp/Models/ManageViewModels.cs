@@ -19,6 +19,7 @@ namespace MvcApp.Models
     {
         public IList<UserLoginInfo> CurrentLogins { get; set; }
         public IList<AuthenticationDescription> OtherLogins { get; set; }
+        public IEnumerable<AuthenticationDescription> ExternalAuthenticationTypes { get; set; }
     }
 
     public class FactorViewModel

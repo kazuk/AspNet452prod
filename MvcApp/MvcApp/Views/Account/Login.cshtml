@@ -1,5 +1,5 @@
-﻿@using MvcApp.Controllers
-@using MvcApp.Models
+﻿@using MvcApp.Models
+@using MvcApp.Views.Account
 @model LoginViewModel
 @{
     ViewBag.Title = "ログイン";
@@ -9,7 +9,10 @@
 <div class="row">
     <div class="col-md-8">
         <section id="loginForm">
-            @using (Html.BeginForm(AccountController.ActionNames.Login, ControllerNames.Account, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+
+            
+    
+            @using (Html.AccountLoginForm((string)ViewBag.ReturnUrl, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
                 <h4>ローカル アカウントを使用してログインします。</h4>
@@ -43,7 +46,7 @@
                     </div>
                 </div>
                 <p>
-                    @Html.ActionLink("新しいユーザーとして登録する", AccountController.ActionNames.Register)
+                    @ViewHelpers.AccountRegisterLink(Html)
                 </p>
                 @* これを有効にする前に、パスワード リセット機能に対するアカウント確認を有効にしてください。
                     <p>

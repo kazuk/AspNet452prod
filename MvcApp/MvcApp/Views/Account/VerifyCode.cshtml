@@ -1,15 +1,16 @@
-﻿@using MvcApp.Controllers
+﻿@using MvcApp.Views.Account
 @model MvcApp.Models.VerifyCodeViewModel
+
 @{
     ViewBag.Title = "確認";
 }
 
 <h2>@ViewBag.Title.</h2>
 
-@using (Html.BeginForm(AccountController.ActionNames.VerifyCode, ControllerNames.Account, new { ReturnUrl = Model.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
+@using (Html.AccountVerifyCodeForm(Model.ReturnUrl, new { @class = "form-horizontal", role = "form" })) {
     @Html.AntiForgeryToken()
-    @Html.Hidden("provider", @Model.Provider)
-    @Html.Hidden("rememberMe", @Model.RememberMe)
+    @Html.Hidden("provider", Model.Provider)
+    @Html.Hidden("rememberMe", Model.RememberMe)
     <h4>確認コードを入力する</h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })

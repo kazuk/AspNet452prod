@@ -1,6 +1,12 @@
-﻿@model MvcApp.Models.ExternalLoginListViewModel
+﻿@model ExternalLoginListViewModel
+
+@functions {
+
+}
 @using Microsoft.Owin.Security
 @using MvcApp.Controllers
+@using MvcApp.Models
+@using MvcApp.Views.Account
 
 <h4>別のサービスを使用してログインしてください。</h4>
 <hr />
@@ -15,7 +21,7 @@
         </div>
     }
     else {
-        using (Html.BeginForm( AccountController.ActionNames.ExternalLogin , ControllerNames.Account, new { ReturnUrl = Model.ReturnUrl })) {
+        using (Html.AccountExternalLoginForm(Model.ReturnUrl)) {
             @Html.AntiForgeryToken()
             <div id="socialLoginList">
                 <p>
